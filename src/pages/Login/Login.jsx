@@ -1,16 +1,33 @@
 import React, { useState } from "react";
 import "./Login.css";
 import assets from "../../assets/assets";
+import { signup, login } from "../../config/firebase";
+
 const Login = () => {
   const [currState, setCurrState] = useState("Sign Up");
+
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    if (currState === "Sign Up") {
+      signup(username, email, password);
+    } else {
+      login(email, password);
+    }
+  };
 
   return (
     <div className="login">
       <img className="logo" src={assets.logo_big} alt="" />
-      <form className="login-form" action="">
+      <form onSubmit={onSubmitHandler} className="login-form" action="">
         <h2>{currState}</h2>
         {currState === "Sign Up" ? (
           <input
+            onChange={(e) => setUserName(e.target.value)}
+            value={username}
             type="text"
             placeholder="username"
             className="form-input"
@@ -19,12 +36,16 @@ const Login = () => {
         ) : null}
 
         <input
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
           type="email"
           placeholder="email address"
           className="form-input"
           required
         />
         <input
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
           type="password"
           placeholder="password"
           className="form-input"
